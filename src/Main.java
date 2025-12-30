@@ -1,5 +1,5 @@
 import java.util.Scanner;
-//import com.google.gson.Gson;
+// not working : import com.google.gson.Gson;
 
 public class Main {
     private static Scanner scanner = new Scanner(System.in);
@@ -27,15 +27,19 @@ public class Main {
                 case "2":
                     //add rating
                     addRating();
+                    break;
                 case "3":
                     //add review
                     addReview();
+                    break;
                 case "4":
-                    //show ratings
+                    showMyRatings();
+                    break;
                 case "5":
                     //get recommendations
                 case "6":
                     //save everything and exit
+
                 default:
                     System.out.println("Invalid choice. Please try again.");
             }
@@ -74,7 +78,7 @@ public class Main {
             int rating = Integer.parseInt(scanner.nextLine());
 
             if (rating < 1 || rating > 5) {
-                System.out.println("Rating must be between 1 and 10.");
+                System.out.println("Rating must be between 1 and 5.");
                 return;
             }
 
@@ -100,13 +104,18 @@ public class Main {
 
         if (database.getRatings().isEmpty()) {
             System.out.println("No ratings yet. Rate some manga first!");
-            return;
+        } else {
+             for (String title : database.getRatings().keySet()) {
+                int rating = database.getRating(title);
+                String review = database.getReview(title);
+                System.out.println(title + ": " + rating + "/10");
+                if (review != null) {
+                    System.out.println("  Review: " + review);
+                }
+                System.out.println(); // Empty line 
+            }
         }
-
-        //continue
     }
-
-
     
 }
 

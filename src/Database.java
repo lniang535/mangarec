@@ -27,6 +27,12 @@ public class Database {
         return ratings;
     }
 
+    //get all reviews
+    public Map<String, String> getReviews() {
+        return reviews;
+    }
+
+
     //get rating for specific manga 
     public Integer getRating(String title) {
         return ratings.get(title);
