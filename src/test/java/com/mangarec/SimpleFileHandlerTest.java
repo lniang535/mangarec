@@ -54,8 +54,8 @@ public class SimpleFileHandlerTest {
 
             while (scan.hasNextLine()) {
                 String line = scan.nextLine();
-                if (line.equals("RATING:NARUTO:5")) rating = true;
-                if (line.equals("REVIEW:NARUTO:Reviewed")) review = true;
+                if (line.equals("RATING:Naruto:5")) rating = true;
+                if (line.equals("REVIEW:Naruto:Reviewed")) review = true;
             }
 
             assertTrue(rating, "Saved file should have the correct rating");

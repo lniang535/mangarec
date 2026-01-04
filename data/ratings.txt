@@ -1,0 +1,2 @@
+RATING:Naruto:5
+REVIEW:Naruto:Reviewed
