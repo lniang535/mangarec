@@ -96,7 +96,7 @@ public class ApiHandler {
             }
 
             //Truncate the synopsis of the manga if it's too long
-            if (synopsis.length() > 150) synopsis = synopsis.substring(0, 200) + "...";
+            if (synopsis.length() > 200) synopsis = synopsis.substring(0, 200) + "...";
 
             System.out.println("\n=====================================");
             System.out.println((m + 1) + ". " + mangaTitle);
