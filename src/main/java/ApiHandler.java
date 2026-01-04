@@ -55,12 +55,38 @@ public class ApiHandler {
             String mangaTitle = manga.get("title").getAsString(); //grabs the manga title
             int malID = manga.get("mal_id").getAsInt(); //grabs the manga's MyAnimeList id
 
+            //get chapters, 0 is missing
+            int chapters = manga.has("chapters") && !manga.get("chapters").isJsonNull()
+                    ? manga.get("chapters").getAsInt() : 0;
+            
+            //get volumes, 0 if missing
+            int volumes = manga.has("volumes") && !manga.get("volumes").isJsonNull()
+                    ? manga.get("volumes").getAsInt() : 0;
+
+            //cover image link
+            String coverUrl = manga.getAsJsonObject("images").getAsJsonObject("jpg")
+                    .get("image_url").getAsString();
+
             String score; //to hold the manga's score
             if (manga.has("score") && !manga.get("score").isJsonNull()) { //make sure the score exists
                 score = manga.get("score").getAsString(); 
             } else {
                 score = "N/A";
             }
+
+            //get genres of manga
+            String genres = "N/A";
+            if (manga.has("genres") && !manga.get("genres").isJsonNull()) {
+                JsonArray genreArr = manga.getAsJsonArray("genres");
+                genres = "";
+                for (int i = 0; i < genreArr.size(); i++) {
+                    genres += genreArr.get(i).getAsJsonObject().get("name").getAsString();
+                    if (i < genreArr.size() - 1) {
+                        genres += ", ";
+                    }
+                }
+}
+
 
             String synopsis; //to hold the manga's synopsis
             if (manga.has("synopsis") && !manga.get("synopsis").isJsonNull()) { //make sure the score exists
@@ -72,16 +98,46 @@ public class ApiHandler {
             //Truncate the synopsis of the manga if it's too long
             if (synopsis.length() > 150) synopsis = synopsis.substring(0, 200) + "...";
 
+            System.out.println("\n=====================================");
             System.out.println((m + 1) + ". " + mangaTitle);
-            System.out.println("    MAL ID: " + malID);
-            System.out.println("    Score: " + score);
-            System.out.println("    " + synopsis);
-            System.out.println();
+            System.out.println("-------------------------------------");
+            System.out.printf("MAL ID   : %d%n", malID);
+            System.out.printf("Score    : %s%n", score);
+            System.out.printf("Chapters : %d%n", chapters);
+            System.out.printf("Volumes  : %d%n", volumes);
+            System.out.printf("Cover    : %s%n", coverUrl);
+            System.out.printf("Genres   : %s%n", genres);
+            System.out.println("Synopsis : ");
+            System.out.println(synopsis);
+            System.out.println("=====================================");
 
         }
         
         //In our full implementation, we'd actually parse through the entire JSON response properly
         //and it would formatted nicely. For now, we just show the raw JSON response
-        System.out.println(jsonResponse.substring(0, Math.min(500, jsonResponse.length())) + "...");
+        //System.out.println(jsonResponse.substring(0, Math.min(500, jsonResponse.length())) + "...");
+    }
+
+    //gets url and returns the json string
+    public static String getUrl(String apiurl) {
+        try {
+            URL url = new URL(apiurl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+
+            String line;
+            StringBuilder response = new StringBuilder();
+
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
+            }
+            reader.close();
+            return response.toString();
+        } catch (Exception e) {
+            System.out.println("Error getting URL: " + e.getMessage());
+            return null;
+        }
     }
 }
