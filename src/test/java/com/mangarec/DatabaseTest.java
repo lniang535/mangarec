@@ -1,4 +1,4 @@
-package test;
+package com.mangarec;
 
 public class DatabaseTest {
     

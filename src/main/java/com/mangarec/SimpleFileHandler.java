@@ -1,5 +1,6 @@
 //Saves and loads the Database object as JSON
 //file system without gson bc wasn-t working at time
+package com.mangarec;
 
 import java.io.*;
 import java.util.*;

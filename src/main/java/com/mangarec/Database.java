@@ -1,3 +1,5 @@
+package com.mangarec;
+
 import java.util.HashMap;
 import java.util.Map;
 

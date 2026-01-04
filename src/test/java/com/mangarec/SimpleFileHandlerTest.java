@@ -1,7 +1,8 @@
-package test;
+package com.mangarec;
 
 import org.junit.jupiter.api.*;
 import java.io.File;
+import java.io.PrintWriter;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -69,7 +70,7 @@ public class SimpleFileHandlerTest {
     public void testLoadDataCorrectlyReadsReviewsAndRatings() {
         //Manually fill the file
         new File("data").mkdirs();
-        try (PrintWriter write = new PrintWriter("data/ratings.txt")) {
+        try (PrintWriter writer = new PrintWriter("data/ratings.txt")) {
             writer.println("RATING:NARUTO:4");
             writer.println("REVIEW:NARUTO:Reviewed");
         } catch (Exception e) {
@@ -78,11 +79,11 @@ public class SimpleFileHandlerTest {
 
         SimpleFileHandler.loadData(database);
 
-        Map<String, Integer> reviews = database.getReviews();
+        Map<String, String> reviews = database.getReviews();
         Map<String, Integer> ratings = database.getRatings();
 
         assertEquals(1, ratings.size(), "There should be one rating");
-        assertEquals(1, reviews.szie(), "There should be one review");
+        assertEquals(1, reviews.size(), "There should be one review");
         assertEquals(4, ratings.get("NARUTO"));
         assertEquals("Reviewed", reviews.get("NARUTO"));
     }
@@ -95,6 +96,6 @@ public class SimpleFileHandlerTest {
         if (file.exists()) file.delete();
 
         assertTrue(database.getRatings().isEmpty());
-        assertTrue(database.getReviews.isEmpty());
+        assertTrue(database.getReviews().isEmpty());
     }
 }
