@@ -3,6 +3,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import com.google.gson.*;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ApiHandler {
     //A search method that finds manga by title
@@ -139,5 +141,33 @@ public class ApiHandler {
             System.out.println("Error getting URL: " + e.getMessage());
             return null;
         }
+    }
+
+    //gets all manga genres in the Jikan API 
+    public static Map<String, Integer> getGenres() {
+        Map<String, Integer> genres = new HashMap<>(); //Map for genres and their malID
+
+        try {
+            String jsonString = getUrl("https://api.jikan.moe/v4/genres/manga");
+
+            //Parse the JSON string to get the pagination and data keys
+            JsonObject parsedString = JsonParser.parseString(jsonString).getAsJsonObject();
+        
+            //Now extract the data array by looking up the "data" key
+            JsonArray data = parsedString.getAsJsonArray("data");
+
+            //Store the name of the genre and its corresponding id into the map
+            for (JsonElement element : data) {
+                JsonObject genre = element.getAsJsonObject(); 
+                String name = genre.get("name").getAsString().toLowerCase(); //Stores genre name
+                int id = genre.get("mal_id").getAsInt(); //Stores genre's mal id
+
+                genres.put(name, id);
+            }
+        } catch (Exception e) {
+            System.out.println("Failed to get genres: " + e.getMessage());
+        }
+
+        return genres;
     }
 }

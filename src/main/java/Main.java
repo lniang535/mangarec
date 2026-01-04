@@ -9,52 +9,15 @@ public class Main {
     private static Database database = new Database();
 
     //all genres on jikan
-    private static final Map<String, Integer> genreMap = Map.ofEntries(
-    Map.entry("action", 1),
-    Map.entry("adventure", 2),
-    Map.entry("cars", 3),
-    Map.entry("comedy", 4),
-    Map.entry("dementia", 5),
-    Map.entry("demons", 6),
-    Map.entry("mystery", 7),
-    Map.entry("drama", 8),
-    Map.entry("ecchi", 9),
-    Map.entry("fantasy", 10),
-    Map.entry("game", 11),
-    Map.entry("magic", 12),
-    Map.entry("martial arts", 13),
-    Map.entry("vampire", 14),
-    Map.entry("harem", 15),
-    Map.entry("slice of life", 16),
-    Map.entry("samurai", 17),
-    Map.entry("mecha", 18),
-    Map.entry("school", 19),
-    Map.entry("psychological", 20),
-    Map.entry("shoujo", 21),
-    Map.entry("romance", 22),
-    Map.entry("sci-fi", 23),
-    Map.entry("shoujo ai", 24),
-    Map.entry("shounen", 25),
-    Map.entry("shounen ai", 26),
-    Map.entry("space", 27),
-    Map.entry("sports", 28),
-    Map.entry("super power", 29),
-    Map.entry("yaoi", 31),
-    Map.entry("yuri", 32),
-    Map.entry("hentai", 33),
-    Map.entry("doujinshi", 34),
-    Map.entry("gender bender", 35),
-    Map.entry("thriller", 36),
-    Map.entry("supernatural", 37),
-    Map.entry("military", 38),
-    Map.entry("police", 39),
-    Map.entry("seinen", 41),
-    Map.entry("josei", 42)
-);
+    private static Map<String, Integer> genreMap;
 
     public static void main(String[] args) {
         System.out.println("=== Welcome to Mangarec ===");
         System.out.println("Your personal manga tracker and recommender!");
+
+        //Get all genres in the Jikan API
+        genreMap = ApiHandler.getGenres();
+        if (genreMap.isEmpty()) System.out.println("Warning: Could not load genres from Jikan");
 
         //load data using simplefilehandler
         SimpleFileHandler.loadData(database);
@@ -181,7 +144,7 @@ public class Main {
 
         while (genreId == -1) {
             System.out.print("\nEnter the genre of manga you want (e.g., action, romance, vampire): ");
-            userInput = scanner.nextLine().replaceAll("[^a-z\\s]", "").trim();
+            userInput = scanner.nextLine().toLowerCase().replaceAll("[^a-z\\s]", "").trim();
 
             if (genreMap.containsKey(userInput)) {
                 genreId = genreMap.get(userInput);
@@ -210,7 +173,6 @@ public class Main {
         } catch (Exception e) {
             System.out.println("Error fetching manga: " + e.getMessage());
         }
-
     }
 }
 
